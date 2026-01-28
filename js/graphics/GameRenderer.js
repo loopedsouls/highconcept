@@ -57,13 +57,23 @@ export class GameRenderer {
 
     resizeToFit() {
         const parent = this.canvas.parentElement;
-        if (parent) {
-            this.canvas.width = parent.clientWidth;
-            this.canvas.height = parent.clientHeight;
+        let width, height;
+        
+        if (parent && parent.clientWidth > 0 && parent.clientHeight > 0) {
+            width = parent.clientWidth;
+            height = parent.clientHeight;
         } else {
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight - 160;
+            // Fallback se o parent não tiver dimensões
+            width = window.innerWidth;
+            height = window.innerHeight - 200;
         }
+        
+        // Garante dimensões mínimas
+        width = Math.max(width, 320);
+        height = Math.max(height, 240);
+        
+        this.canvas.width = width;
+        this.canvas.height = height;
         
         // Pixel size fixo para manter nitidez
         this.pixelSize = 3;
@@ -73,10 +83,14 @@ export class GameRenderer {
             this.renderer.ctx.imageSmoothingEnabled = false;
         }
         
+        this.ctx.imageSmoothingEnabled = false;
+        
         this.updateDimensions();
         
         // Regenerar itens das prateleiras para nova largura
         this.shelfItems = this.generateShelfItems();
+        
+        console.log(`[GameRenderer] Resized to ${width}x${height}`);
     }
 
     updateDimensions() {

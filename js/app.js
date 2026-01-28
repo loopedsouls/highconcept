@@ -60,6 +60,14 @@ class Game {
             console.log('[High Concept] Game started!');
             this.running = true;
             this.lastTime = performance.now();
+            
+            // Força resize do canvas após a tela ficar visível
+            if (this.renderer) {
+                setTimeout(() => {
+                    this.renderer.resizeToFit();
+                }, 50);
+            }
+            
             this.gameLoop();
         });
         
