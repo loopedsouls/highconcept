@@ -24,17 +24,23 @@ import {
 export class GameRenderer {
     constructor(canvas) {
         this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        
+        // Ajusta para tela cheia
+        this.resizeToFit();
+        window.addEventListener('resize', () => this.resizeToFit());
+        
+        // Tamanho do pixel calculado dinamicamente
         this.pixelSize = 4;
         this.renderer = new PixelRenderer(canvas, this.pixelSize);
         
         // Dimensões do jogo em pixels virtuais
-        this.gameWidth = Math.floor(canvas.width / this.pixelSize);
-        this.gameHeight = Math.floor(canvas.height / this.pixelSize);
+        this.updateDimensions();
         
         // Estado de animação
         this.animationFrame = 0;
         this.lastFrameTime = 0;
-        this.frameInterval = 150; // ms entre frames de animação
+        this.frameInterval = 150;
         
         // Itens aleatórios nas prateleiras
         this.shelfItems = this.generateShelfItems();
@@ -47,6 +53,32 @@ export class GameRenderer {
         this.customerLeaving = false;
         this.customerX = 0;
         this.dangerFlash = false;
+    }
+
+    resizeToFit() {
+        const parent = this.canvas.parentElement;
+        if (parent) {
+            this.canvas.width = parent.clientWidth;
+            this.canvas.height = parent.clientHeight;
+        } else {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight - 160; // Espaço para HUD e controles
+        }
+        
+        // Recalcula pixel size baseado na altura
+        this.pixelSize = Math.max(2, Math.floor(this.canvas.height / 120));
+        
+        if (this.renderer) {
+            this.renderer.pixelSize = this.pixelSize;
+            this.renderer.ctx.imageSmoothingEnabled = false;
+        }
+        
+        this.updateDimensions();
+    }
+
+    updateDimensions() {
+        this.gameWidth = Math.floor(this.canvas.width / this.pixelSize);
+        this.gameHeight = Math.floor(this.canvas.height / this.pixelSize);
     }
 
     generateShelfItems() {
@@ -171,9 +203,9 @@ export class GameRenderer {
             this.renderer.drawLine(0, y, this.gameWidth, y, PALETTE.gray);
         }
         
-        // Piso
-        const floorY = this.gameHeight - 20;
-        this.renderer.drawRect(0, floorY, this.gameWidth, 20, '#2d2d44');
+        // Piso (20% da altura)
+        const floorY = Math.floor(this.gameHeight * 0.8);
+        this.renderer.drawRect(0, floorY, this.gameWidth, this.gameHeight - floorY, '#2d2d44');
         
         // Linhas do piso (azulejos)
         for (let x = 0; x < this.gameWidth; x += 10) {
@@ -182,8 +214,13 @@ export class GameRenderer {
     }
 
     drawCeilingLights() {
-        const lightPositions = [30, 90, 150];
-        for (const x of lightPositions) {
+        // Distribuir luzes ao longo da largura
+        const numLights = Math.max(3, Math.floor(this.gameWidth / 60));
+        const spacing = this.gameWidth / (numLights + 1);
+        
+        for (let i = 1; i <= numLights; i++) {
+            const x = Math.floor(spacing * i) - 6;
+            
             // Fio
             this.renderer.drawLine(x + 6, 0, x + 6, 8, PALETTE.gray);
             // Luz
@@ -191,13 +228,13 @@ export class GameRenderer {
             
             // Cone de luz
             if (!this.maskOn || this.animationFrame % 60 < 55) {
-                for (let i = 0; i < 30; i++) {
-                    const alpha = 0.1 - (i * 0.003);
+                for (let j = 0; j < 30; j++) {
+                    const alpha = 0.1 - (j * 0.003);
                     if (alpha > 0) {
                         this.renderer.drawRect(
-                            x - i / 2, 
-                            15 + i, 
-                            12 + i, 
+                            x - j / 2, 
+                            15 + j, 
+                            12 + j, 
                             1, 
                             `rgba(244, 208, 63, ${alpha})`
                         );
@@ -208,28 +245,35 @@ export class GameRenderer {
     }
 
     drawShelves() {
-        const shelfY = [15, 30, 45];
-        const shelfX = [5, 65, 125];
+        // Posições relativas à tela
+        const shelfYPercent = [0.12, 0.25, 0.38];
+        const numShelves = Math.max(3, Math.floor(this.gameWidth / 70));
+        const shelfSpacing = this.gameWidth / (numShelves + 1);
         
-        for (let s = 0; s < 3; s++) {
-            // Desenhar prateleira
-            this.renderer.drawSprite(SHELF, shelfX[s], shelfY[s]);
+        for (let s = 0; s < numShelves; s++) {
+            const shelfX = Math.floor(shelfSpacing * (s + 0.5));
             
-            // Desenhar itens na prateleira
-            if (this.shelfItems[s]) {
-                for (const item of this.shelfItems[s]) {
-                    // Colorir o item
-                    const coloredItem = item.type.map(row => 
-                        row.map(c => c === PALETTE.fire ? item.color : c)
-                    );
-                    this.renderer.drawSprite(coloredItem, shelfX[s] + item.x, shelfY[s] - item.type.length);
+            for (let row = 0; row < 3; row++) {
+                const shelfY = Math.floor(this.gameHeight * shelfYPercent[row]);
+                
+                // Desenhar prateleira
+                this.renderer.drawSprite(SHELF, shelfX, shelfY);
+                
+                // Desenhar itens na prateleira
+                if (this.shelfItems[row]) {
+                    for (const item of this.shelfItems[row]) {
+                        const coloredItem = item.type.map(r => 
+                            r.map(c => c === PALETTE.fire ? item.color : c)
+                        );
+                        this.renderer.drawSprite(coloredItem, shelfX + item.x, shelfY - item.type.length);
+                    }
                 }
             }
         }
     }
 
     drawCounter() {
-        const counterY = this.gameHeight - 35;
+        const counterY = Math.floor(this.gameHeight * 0.7);
         this.renderer.drawSprite(COUNTER, 0, counterY);
         
         // Extensão do balcão para preencher largura
@@ -239,14 +283,14 @@ export class GameRenderer {
     }
 
     drawCashRegister() {
-        const registerX = 10;
-        const registerY = this.gameHeight - 45;
+        const registerX = Math.floor(this.gameWidth * 0.05);
+        const registerY = Math.floor(this.gameHeight * 0.62);
         this.renderer.drawSprite(CASH_REGISTER, registerX, registerY);
     }
 
     drawPlayer() {
-        const playerX = 15;
-        const playerY = this.gameHeight - 52;
+        const playerX = Math.floor(this.gameWidth * 0.08);
+        const playerY = Math.floor(this.gameHeight * 0.55);
         
         // Escolher sprite baseado no estado da máscara
         const sprite = this.maskOn ? PLAYER_WITH_MASK : PLAYER_IDLE;
@@ -263,7 +307,7 @@ export class GameRenderer {
         const customerId = this.currentCustomer?.id || 'normal';
         const sprite = CUSTOMER_SPRITES[customerId] || CUSTOMER_SPRITES['normal'];
         
-        const customerY = this.gameHeight - 52;
+        const customerY = Math.floor(this.gameHeight * 0.55);
         
         // Animação de idle (balanço)
         const idleOffset = Math.sin(this.animationFrame / 15) * 0.5;
@@ -290,9 +334,9 @@ export class GameRenderer {
         const dangerId = this.currentDanger.id;
         const sprite = DANGER_SPRITES[dangerId] || DANGER_SPRITES['alarm'];
         
-        // Posição do perigo (canto superior direito)
-        const dangerX = this.gameWidth - 25;
-        const dangerY = 20;
+        // Posição do perigo (canto superior direito, relativo)
+        const dangerX = Math.floor(this.gameWidth * 0.85);
+        const dangerY = Math.floor(this.gameHeight * 0.15);
         
         // Animação de tremor para perigos
         const shakeX = this.dangerFlash ? (Math.random() - 0.5) * 2 : 0;
@@ -338,47 +382,51 @@ export class GameRenderer {
         
         const ctx = this.renderer.ctx;
         const ps = this.pixelSize;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        
+        // Bordas proporcionais ao tamanho da tela
+        const borderSize = Math.floor(Math.min(w, h) * 0.15);
         
         // Desenhar bordas de papelão
         ctx.fillStyle = PALETTE.cardboard;
         
         // Borda superior
-        ctx.fillRect(0, 0, this.canvas.width, 30 * ps);
+        ctx.fillRect(0, 0, w, borderSize);
         // Borda inferior
-        ctx.fillRect(0, this.canvas.height - 40 * ps, this.canvas.width, 40 * ps);
+        ctx.fillRect(0, h - borderSize * 1.2, w, borderSize * 1.2);
         // Borda esquerda
-        ctx.fillRect(0, 0, 40 * ps, this.canvas.height);
+        ctx.fillRect(0, 0, borderSize, h);
         // Borda direita
-        ctx.fillRect(this.canvas.width - 40 * ps, 0, 40 * ps, this.canvas.height);
+        ctx.fillRect(w - borderSize, 0, borderSize, h);
         
         // Detalhes da máscara (textura de papelão)
         ctx.fillStyle = PALETTE.cardboardDark;
-        for (let i = 0; i < 20; i++) {
-            const x = Math.random() * 40 * ps;
-            const y = Math.random() * this.canvas.height;
+        for (let i = 0; i < 30; i++) {
+            const x = Math.random() * borderSize;
+            const y = Math.random() * h;
             ctx.fillRect(x, y, ps * 2, ps);
-            ctx.fillRect(this.canvas.width - 40 * ps + x, y, ps * 2, ps);
+            ctx.fillRect(w - borderSize + x, y, ps * 2, ps);
         }
         
         // Sorriso desenhado na máscara (visível nas bordas)
-        ctx.fillStyle = PALETTE.yellow;
-        // Curva do sorriso na parte inferior
         ctx.beginPath();
-        ctx.arc(this.canvas.width / 2, this.canvas.height - 20 * ps, 30 * ps, 0.1 * Math.PI, 0.9 * Math.PI, false);
-        ctx.lineWidth = 4 * ps;
+        ctx.arc(w / 2, h - borderSize * 0.5, borderSize * 0.8, 0.1 * Math.PI, 0.9 * Math.PI, false);
+        ctx.lineWidth = ps * 3;
         ctx.strokeStyle = PALETTE.yellow;
         ctx.stroke();
         
         // Texto "SORRIA!" no topo
-        ctx.font = `bold ${6 * ps}px monospace`;
+        const fontSize = Math.max(16, Math.floor(borderSize * 0.4));
+        ctx.font = `bold ${fontSize}px monospace`;
         ctx.fillStyle = PALETTE.yellow;
         ctx.textAlign = 'center';
-        ctx.fillText('☺ SORRIA! ☺', this.canvas.width / 2, 20 * ps);
+        ctx.fillText('☺ SORRIA! ☺', w / 2, borderSize * 0.6);
         
         // Efeito de respiração na máscara
         const breathAlpha = 0.1 + Math.sin(this.animationFrame / 25) * 0.05;
         ctx.fillStyle = `rgba(0, 0, 0, ${breathAlpha})`;
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillRect(0, 0, w, h);
     }
 
     drawScanlines() {
