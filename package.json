@@ -4,6 +4,7 @@
   "description": "High Concept Game - A web-based game where you manage a convenience store with a smile mask.",
   "main": "index.html",
   "scripts": {
+    "build": "mkdir -p dist && cp -r index.html css js dist/ && echo 'Build complete: files copied to dist/'",
     "dev": "http-server . -p 3000 -o",
     "start": "http-server . -p 3000"
   },
