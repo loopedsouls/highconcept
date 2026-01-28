@@ -10,10 +10,15 @@ LABEL description="Jogo de sobrevivência burocrática distópica"
 # Remove configuração padrão do nginx
 RUN rm -rf /usr/share/nginx/html/*
 
+# Cria diretório de assets
+RUN mkdir -p /usr/share/nginx/html/assets
+
 # Copia arquivos do jogo
 COPY index.html /usr/share/nginx/html/
 COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/
+
+# Copia assets se existirem (ignora erro se vazio)
 COPY assets/ /usr/share/nginx/html/assets/
 
 # Configuração customizada do nginx para SPA
