@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Cards - High Concept Game
+   Cards para status, clientes, perigos, etc.
+   ========================================================================== */
+
+.card {
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-secondary-light);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    transition: all var(--transition-fast);
+}
+
+.card:hover {
+    border-color: var(--color-primary);
+}
+
+/* Card de Status */
+.card--status {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    min-width: 200px;
+}
+
+.card--status__label {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-text-muted);
+}
+
+.card--status__value {
+    font-family: var(--font-display);
+    font-size: var(--font-size-2xl);
+    color: var(--color-text-primary);
+}
+
+.card--status__value--danger {
+    color: var(--color-danger);
+    animation: pulse-danger 1s ease-in-out infinite;
+}
+
+.card--status__value--warning {
+    color: var(--color-warning);
+}
+
+.card--status__value--success {
+    color: var(--color-success);
+}
+
+@keyframes pulse-danger {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Card de Cliente */
+.card--customer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, var(--color-bg-card), var(--color-bg-medium));
+    border-left: 4px solid var(--color-primary);
+}
+
+.card--customer__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--border-radius-full);
+    background: var(--color-secondary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-2xl);
+    border: 2px solid var(--color-primary);
+}
+
+.card--customer__info {
+    flex: 1;
+}
+
+.card--customer__type {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.card--customer__description {
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+}
+
+.card--customer__patience {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.card--customer__patience-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--color-bg-dark);
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+}
+
+.card--customer__patience-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-danger), var(--color-warning), var(--color-success));
+    transition: width var(--transition-normal);
+}
+
+/* Card de Perigo */
+.card--danger {
+    background: linear-gradient(135deg, rgba(231,76,60,0.1), var(--color-bg-card));
+    border: 2px solid var(--color-danger);
+    animation: danger-pulse 2s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.card--danger::before {
+    content: '⚠';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 100px;
+    opacity: 0.1;
+    color: var(--color-danger);
+}
+
+.card--danger__icon {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-md);
+}
+
+.card--danger__title {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xl);
+    color: var(--color-danger);
+    text-transform: uppercase;
+}
+
+.card--danger__timer {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-2xl);
+    color: var(--color-text-primary);
+    margin-top: var(--spacing-md);
+}
+
+@keyframes danger-pulse {
+    0%, 100% { 
+        box-shadow: 0 0 10px var(--color-danger-glow);
+    }
+    50% { 
+        box-shadow: 0 0 30px var(--color-danger-glow);
+    }
+}
+
+/* Card de Pontuação */
+.card--score {
+    background: linear-gradient(135deg, var(--color-secondary-dark), var(--color-bg-dark));
+    border: 2px solid var(--color-primary);
+    text-align: center;
+}
+
+.card--score__label {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.card--score__value {
+    font-family: var(--font-display);
+    font-size: var(--font-size-4xl);
+    color: var(--color-text-primary);
+    text-shadow: 0 0 10px var(--color-primary);
+}

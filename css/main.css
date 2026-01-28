@@ -1,0 +1,132 @@
+/* ==========================================================================
+   Main CSS - High Concept Game
+   Importa todos os módulos CSS
+   ========================================================================== */
+
+/* Base */
+@import './base/reset.css';
+@import './base/variables.css';
+
+/* Components */
+@import './components/buttons.css';
+@import './components/cards.css';
+@import './components/modals.css';
+
+/* Layout */
+@import './layout/menu.css';
+@import './layout/game-screen.css';
+@import './layout/hud.css';
+
+/* Themes */
+@import './themes/dystopian.css';
+
+/* ==========================================================================
+   Global Styles
+   ========================================================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-ui);
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Screen visibility management */
+.screen {
+    display: none;
+    min-height: 100vh;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Flex screen layout */
+.screen--flex {
+    display: none;
+}
+
+.screen--flex.active {
+    display: flex;
+}
+
+/* Grid screen layout */
+.screen--grid {
+    display: none;
+}
+
+.screen--grid.active {
+    display: grid;
+}
+
+/* Selection styling */
+::selection {
+    background: var(--color-primary);
+    color: var(--color-secondary-dark);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-secondary-light);
+    border-radius: var(--border-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+}
+
+/* Focus styling para acessibilidade */
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Utility classes */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-primary {
+    color: var(--color-primary);
+}
+
+.text-danger {
+    color: var(--color-danger);
+}
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }

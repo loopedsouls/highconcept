@@ -1,0 +1,241 @@
+/* ==========================================================================
+   HUD (Heads-Up Display) - High Concept Game
+   Interface superior com status do jogo
+   ========================================================================== */
+
+.hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: linear-gradient(180deg, var(--color-bg-medium), var(--color-bg-dark));
+    border-bottom: 2px solid var(--color-secondary-light);
+    position: relative;
+    z-index: 10;
+}
+
+/* Container esquerdo - Timer e Status */
+.hud__left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+}
+
+/* Container direito - Pontuação */
+.hud__right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+}
+
+/* Timer */
+.hud__timer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--color-bg-dark);
+    border: 2px solid var(--color-secondary-light);
+    border-radius: var(--border-radius-sm);
+}
+
+.hud__timer-icon {
+    font-size: var(--font-size-xl);
+}
+
+.hud__timer-value {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xl);
+    color: var(--color-text-primary);
+    min-width: 60px;
+    text-align: center;
+}
+
+.hud__timer--warning .hud__timer-value {
+    color: var(--color-warning);
+    animation: pulse-warning 0.5s ease-in-out infinite;
+}
+
+.hud__timer--critical .hud__timer-value {
+    color: var(--color-danger);
+    animation: pulse-danger 0.3s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Status da Máscara */
+.hud__mask-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all var(--transition-fast);
+}
+
+.hud__mask-status--on {
+    background: rgba(139, 69, 19, 0.3);
+    border: 2px solid var(--color-mask);
+    color: var(--color-primary);
+}
+
+.hud__mask-status--off {
+    background: rgba(231, 76, 60, 0.2);
+    border: 2px solid var(--color-danger);
+    color: var(--color-danger);
+    animation: mask-warning 1s ease-in-out infinite;
+}
+
+@keyframes mask-warning {
+    0%, 100% { box-shadow: 0 0 5px var(--color-danger-glow); }
+    50% { box-shadow: 0 0 20px var(--color-danger-glow); }
+}
+
+.hud__mask-icon {
+    font-size: var(--font-size-lg);
+}
+
+/* Status do Cliente */
+.hud__customer-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-dark);
+    border: 2px solid var(--color-secondary-light);
+    border-radius: var(--border-radius-sm);
+    min-width: 180px;
+}
+
+.hud__customer-status.has-customer {
+    border-color: var(--color-primary);
+    background: rgba(244, 208, 63, 0.1);
+}
+
+.hud__customer-icon {
+    font-size: var(--font-size-lg);
+}
+
+.hud__customer-text {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.hud__customer-status.has-customer .hud__customer-text {
+    color: var(--color-primary);
+}
+
+/* Status do Perigo */
+.hud__danger-status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-dark);
+    border: 2px solid var(--color-secondary-light);
+    border-radius: var(--border-radius-sm);
+    min-width: 180px;
+}
+
+.hud__danger-status.has-danger {
+    border-color: var(--color-danger);
+    background: rgba(231, 76, 60, 0.1);
+    animation: danger-border-pulse 1s ease-in-out infinite;
+}
+
+@keyframes danger-border-pulse {
+    0%, 100% { border-color: var(--color-danger); }
+    50% { border-color: var(--color-warning); }
+}
+
+.hud__danger-icon {
+    font-size: var(--font-size-lg);
+}
+
+.hud__danger-text {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.hud__danger-status.has-danger .hud__danger-text {
+    color: var(--color-danger);
+}
+
+/* Pontuação */
+.hud__score {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-xs);
+}
+
+.hud__score-label {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hud__score-value {
+    font-family: var(--font-display);
+    font-size: var(--font-size-2xl);
+    color: var(--color-primary);
+    text-shadow: 0 0 10px rgba(244, 208, 63, 0.5);
+}
+
+/* Animação de pontos ganhos */
+.hud__score-popup {
+    position: absolute;
+    top: 100%;
+    right: var(--spacing-xl);
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+    color: var(--color-success);
+    opacity: 0;
+    transform: translateY(0);
+    pointer-events: none;
+}
+
+.hud__score-popup.animate {
+    animation: score-popup 1s ease-out forwards;
+}
+
+@keyframes score-popup {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .hud {
+        flex-wrap: wrap;
+        gap: var(--spacing-md);
+        justify-content: center;
+    }
+    
+    .hud__left,
+    .hud__right {
+        gap: var(--spacing-md);
+    }
+    
+    .hud__customer-status,
+    .hud__danger-status {
+        min-width: auto;
+    }
+}

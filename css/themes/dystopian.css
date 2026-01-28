@@ -1,0 +1,244 @@
+/* ==========================================================================
+   Dystopian Theme - High Concept Game
+   Efeitos e animações temáticas
+   ========================================================================== */
+
+/* Efeito de Glitch Global */
+.glitch-effect {
+    animation: glitch-anim 3s infinite;
+}
+
+@keyframes glitch-anim {
+    0%, 100% { 
+        clip-path: inset(0 0 0 0);
+        transform: translate(0);
+    }
+    5% {
+        clip-path: inset(40% 0 61% 0);
+        transform: translate(-2px, 2px);
+    }
+    10% {
+        clip-path: inset(92% 0 1% 0);
+        transform: translate(2px, -2px);
+    }
+    15% {
+        clip-path: inset(0 0 0 0);
+        transform: translate(0);
+    }
+}
+
+/* Texto com efeito de digitação */
+.typewriter {
+    overflow: hidden;
+    border-right: 2px solid var(--color-primary);
+    white-space: nowrap;
+    animation: 
+        typing 3s steps(40, end),
+        blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--color-primary); }
+}
+
+/* Efeito de Scanlines */
+.scanlines::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.1) 2px,
+        rgba(0, 0, 0, 0.1) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Efeito de CRT */
+.crt-effect {
+    animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+    0% { opacity: 0.97; }
+    50% { opacity: 1; }
+    100% { opacity: 0.98; }
+}
+
+/* Texto de Aviso */
+.warning-text {
+    color: var(--color-danger);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: warning-flash 1s ease-in-out infinite;
+}
+
+@keyframes warning-flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Bordas pulsantes */
+.pulse-border {
+    animation: border-pulse 2s ease-in-out infinite;
+}
+
+@keyframes border-pulse {
+    0%, 100% { 
+        box-shadow: 0 0 5px var(--color-primary);
+    }
+    50% { 
+        box-shadow: 0 0 20px var(--color-primary), 0 0 30px var(--color-primary);
+    }
+}
+
+/* Efeito de Estática */
+.static-effect {
+    position: relative;
+}
+
+.static-effect::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.02;
+    pointer-events: none;
+    animation: static-noise 0.5s steps(10) infinite;
+}
+
+@keyframes static-noise {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -5%); }
+    20% { transform: translate(-10%, 5%); }
+    30% { transform: translate(5%, -10%); }
+    40% { transform: translate(-5%, 15%); }
+    50% { transform: translate(-10%, 5%); }
+    60% { transform: translate(15%, 0); }
+    70% { transform: translate(0, 10%); }
+    80% { transform: translate(-15%, 0); }
+    90% { transform: translate(10%, 5%); }
+}
+
+/* Efeito de Aparecer com Fade */
+.fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efeito de Desaparecer */
+.fade-out {
+    animation: fade-out 0.5s ease-out forwards;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Shake para alertas */
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Texto Neon */
+.neon-text {
+    color: var(--color-neon);
+    text-shadow: 
+        0 0 5px var(--color-neon),
+        0 0 10px var(--color-neon),
+        0 0 20px var(--color-neon),
+        0 0 40px var(--color-neon);
+}
+
+/* Container de mensagens do sistema */
+.system-message {
+    font-family: var(--font-primary);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--color-bg-dark);
+    border-left: 3px solid var(--color-primary);
+    margin: var(--spacing-md) 0;
+}
+
+.system-message::before {
+    content: '> ';
+    color: var(--color-primary);
+}
+
+.system-message--error {
+    border-left-color: var(--color-danger);
+}
+
+.system-message--error::before {
+    content: '[ERRO] ';
+    color: var(--color-danger);
+}
+
+.system-message--warning {
+    border-left-color: var(--color-warning);
+}
+
+.system-message--warning::before {
+    content: '[AVISO] ';
+    color: var(--color-warning);
+}
+
+/* Decoração de olho vigilante */
+.surveillance-eye {
+    position: fixed;
+    font-size: 2rem;
+    opacity: 0.1;
+    pointer-events: none;
+    animation: eye-watch 10s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes eye-watch {
+    0%, 100% { 
+        transform: translateX(0) rotate(0deg);
+        opacity: 0.1;
+    }
+    25% { 
+        transform: translateX(5px) rotate(5deg);
+        opacity: 0.15;
+    }
+    50% { 
+        transform: translateX(-5px) rotate(-5deg);
+        opacity: 0.1;
+    }
+    75% { 
+        transform: translateX(3px) rotate(3deg);
+        opacity: 0.2;
+    }
+}

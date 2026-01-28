@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="High Concept - Um jogo de sobrevivência burocrática distópica">
+    <meta name="theme-color" content="#f4d03f">
+    <title>High Concept - Central de Triagem da Felicidade</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="scanlines">
+    
+    <!-- ==================== MENU SCREEN ==================== -->
+    <div id="screen-menu" class="screen screen--flex screen--menu active">
+        <!-- Decoração de olhos -->
+        <div class="menu__eyes" aria-hidden="true">
+            <span class="menu__eye">👁️</span>
+            <span class="menu__eye">👁️</span>
+            <span class="menu__eye">👁️</span>
+        </div>
+        
+        <main class="menu">
+            <!-- Logo -->
+            <header class="menu__logo">
+                <h1 class="menu__title">High Concept</h1>
+                <p class="menu__subtitle">Central de Triagem da Felicidade</p>
+            </header>
+            
+            <!-- ID do Funcionário -->
+            <div class="menu__employee-id">
+                <span>FUNCIONÁRIO #402</span>
+            </div>
+            
+            <!-- Descrição -->
+            <div class="menu__description">
+                <p class="menu__description-title">📋 Briefing Diário</p>
+                <p class="menu__description-text">
+                    <strong>Sorria, você está sendo observado!</strong><br><br>
+                    O mundo acabou em um colapso burocrático. Você trabalha na única instituição que sobreviveu: 
+                    a <em>Central de Triagem da Felicidade</em>.<br><br>
+                    Sua missão: manter a máscara de papelão sorridente ao atender clientes bizarros, 
+                    mas lembre-se — enquanto sorri, você não enxerga os perigos se aproximando.<br><br>
+                    <span class="text-danger">⚠️ Se um cliente ver seu rosto triste, é GAME OVER.</span>
+                </p>
+            </div>
+            
+            <!-- Controles Info -->
+            <div class="menu__description" style="margin-top: var(--spacing-md);">
+                <p class="menu__description-title">🎮 Controles</p>
+                <p class="menu__description-text">
+                    <strong>[ESPAÇO]</strong> - Alternar máscara<br>
+                    <strong>[E]</strong> - Atender cliente<br>
+                    <strong>[R]</strong> - Resolver perigo<br>
+                    <strong>[ESC]</strong> - Pausar
+                </p>
+            </div>
+            
+            <!-- Botões -->
+            <div class="menu__actions">
+                <button id="btn-start" class="btn btn--primary btn--lg">
+                    ▶ Iniciar Turno
+                </button>
+            </div>
+        </main>
+        
+        <!-- Aviso de Vigilância -->
+        <div class="menu__warning">
+            <span class="menu__warning-icon"></span>
+            <span>Câmeras Ativas - Sorria Sempre</span>
+        </div>
+    </div>
+    
+    <!-- ==================== GAME SCREEN ==================== -->
+    <div id="screen-game" class="screen screen--grid screen--game">
+        
+        <!-- HUD Superior -->
+        <header class="hud">
+            <div class="hud__left">
+                <!-- Timer -->
+                <div id="hud-timer" class="hud__timer">
+                    <span class="hud__timer-icon">⏱️</span>
+                    <span id="hud-timer-value" class="hud__timer-value">1:30</span>
+                </div>
+                
+                <!-- Status da Máscara -->
+                <div id="hud-mask-status" class="hud__mask-status hud__mask-status--on">
+                    <span class="hud__mask-icon">😊</span>
+                    <span class="hud__mask-text">Máscara ON</span>
+                </div>
+            </div>
+            
+            <div class="hud__center">
+                <!-- Status do Cliente -->
+                <div id="hud-customer-status" class="hud__customer-status">
+                    <span class="hud__customer-icon">👤</span>
+                    <span id="hud-customer-text" class="hud__customer-text">Nenhum</span>
+                </div>
+                
+                <!-- Status do Perigo -->
+                <div id="hud-danger-status" class="hud__danger-status">
+                    <span class="hud__danger-icon">⚠️</span>
+                    <span id="hud-danger-text" class="hud__danger-text">Nenhum</span>
+                </div>
+            </div>
+            
+            <div class="hud__right">
+                <!-- Pontuação -->
+                <div class="hud__score">
+                    <span class="hud__score-label">Pontuação</span>
+                    <span id="hud-score-value" class="hud__score-value">0</span>
+                    <span id="hud-score-popup" class="hud__score-popup"></span>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Área do Jogo - Canvas Pixel Art -->
+        <main class="game-area">
+            <canvas id="game-canvas" width="720" height="400"></canvas>
+            
+            <!-- Indicadores de texto (overlay sobre o canvas) -->
+            <div id="customer-indicator" class="store-scene__indicator store-scene__indicator--customer"></div>
+            <div id="danger-indicator" class="store-scene__indicator store-scene__indicator--danger"></div>
+        </main>
+        
+        <!-- Controles -->
+        <footer class="game-controls">
+            <button id="btn-toggle-mask" class="btn btn--mask active">
+                😐 Tirar Máscara [ESPAÇO]
+            </button>
+            <button id="btn-serve-customer" class="btn btn--game-action">
+                🤝 Atender Cliente [E]
+            </button>
+            <button id="btn-resolve-danger" class="btn btn--game-action">
+                🔧 Resolver Perigo [R]
+            </button>
+        </footer>
+        
+        <!-- Área de Mensagens -->
+        <div id="message-area" class="message-area"></div>
+    </div>
+    
+    <!-- ==================== GAME OVER SCREEN ==================== -->
+    <div id="screen-game-over" class="screen screen--flex screen--menu">
+        <main class="menu">
+            <header class="menu__logo">
+                <h1 class="menu__title glitch-effect" style="color: var(--color-danger);">GAME OVER</h1>
+                <p id="game-over-reason" class="menu__subtitle" style="color: var(--color-danger);">
+                    O cliente viu seu rosto triste!
+                </p>
+            </header>
+            
+            <!-- Estatísticas Finais -->
+            <div class="menu__description">
+                <p class="menu__description-title">📊 Relatório de Desempenho</p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-lg); margin-top: var(--spacing-md); text-align: center;">
+                    <div>
+                        <p style="color: var(--color-text-muted); font-size: var(--font-size-xs); text-transform: uppercase;">Pontuação</p>
+                        <p id="final-score" style="font-size: var(--font-size-2xl); color: var(--color-primary);">0</p>
+                    </div>
+                    <div>
+                        <p style="color: var(--color-text-muted); font-size: var(--font-size-xs); text-transform: uppercase;">Clientes</p>
+                        <p id="final-customers" style="font-size: var(--font-size-2xl); color: var(--color-success);">0</p>
+                    </div>
+                    <div>
+                        <p style="color: var(--color-text-muted); font-size: var(--font-size-xs); text-transform: uppercase;">Perigos</p>
+                        <p id="final-dangers" style="font-size: var(--font-size-2xl); color: var(--color-warning);">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Botões -->
+            <div class="menu__actions">
+                <button id="btn-restart" class="btn btn--primary btn--lg">
+                    🔄 Tentar Novamente
+                </button>
+                <button id="btn-menu" class="btn btn--secondary">
+                    ◀ Voltar ao Menu
+                </button>
+            </div>
+            
+            <!-- Mensagem motivacional distópica -->
+            <p style="margin-top: var(--spacing-xl); color: var(--color-text-muted); font-style: italic; font-size: var(--font-size-sm);">
+                "A felicidade é obrigatória. A tristeza é proibida."<br>
+                — Manual do Funcionário, Artigo 7, Parágrafo 3
+            </p>
+        </main>
+    </div>
+    
+    <!-- Olhos decorativos flutuantes (vigilância) -->
+    <span class="surveillance-eye" style="top: 15%; left: 5%;" aria-hidden="true">👁️</span>
+    <span class="surveillance-eye" style="top: 40%; right: 3%;" aria-hidden="true">👁️</span>
+    <span class="surveillance-eye" style="bottom: 20%; left: 8%;" aria-hidden="true">👁️</span>
+    
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

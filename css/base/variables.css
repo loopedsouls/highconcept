@@ -1,0 +1,96 @@
+/* ==========================================================================
+   CSS Variables - High Concept Game
+   Tema: Distópico/Burocrático com toques de horror cômico
+   ========================================================================== */
+
+:root {
+    /* Cores Primárias - Burocracia Distópica */
+    --color-primary: #f4d03f;          /* Amarelo burocrático */
+    --color-primary-dark: #d4ac0d;
+    --color-primary-light: #f9e79f;
+    
+    /* Cores Secundárias - Ambiente Opressivo */
+    --color-secondary: #2c3e50;        /* Azul escuro corporativo */
+    --color-secondary-dark: #1a252f;
+    --color-secondary-light: #34495e;
+    
+    /* Cores de Fundo */
+    --color-bg-dark: #0d1117;
+    --color-bg-medium: #161b22;
+    --color-bg-light: #21262d;
+    --color-bg-card: #1c2128;
+    
+    /* Cores de Texto */
+    --color-text-primary: #e6edf3;
+    --color-text-secondary: #8b949e;
+    --color-text-muted: #6e7681;
+    --color-text-warning: #f4d03f;
+    
+    /* Cores de Estado */
+    --color-danger: #e74c3c;
+    --color-danger-glow: rgba(231, 76, 60, 0.5);
+    --color-success: #27ae60;
+    --color-success-glow: rgba(39, 174, 96, 0.5);
+    --color-warning: #f39c12;
+    --color-warning-glow: rgba(243, 156, 18, 0.5);
+    
+    /* Cores Especiais */
+    --color-mask: #8b4513;             /* Marrom papelão da máscara */
+    --color-smile: #2c3e50;            /* Cor do sorriso desenhado */
+    --color-neon: #00ff88;             /* Detalhes neon */
+    --color-blood: #8b0000;            /* Vermelho escuro para perigos */
+    
+    /* Tipografia */
+    --font-primary: 'Courier New', monospace;  /* Fonte burocrática */
+    --font-display: 'Impact', sans-serif;      /* Títulos */
+    --font-ui: system-ui, -apple-system, sans-serif;
+    
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 3rem;
+    --font-size-4xl: 4rem;
+    
+    /* Espaçamento */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+    
+    /* Bordas */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-full: 9999px;
+    
+    /* Sombras */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px var(--color-primary);
+    --shadow-danger: 0 0 30px var(--color-danger-glow);
+    
+    /* Transições */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+    
+    /* Z-index layers */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-modal: 200;
+    --z-mask: 300;
+    --z-overlay: 400;
+    --z-toast: 500;
+    
+    /* Game specific */
+    --game-width: 100vw;
+    --game-height: 100vh;
+    --hud-height: 80px;
+}
